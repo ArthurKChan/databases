@@ -5,7 +5,12 @@ var db = require('../db');
 
 module.exports = {
   messages: {
-    get: function () {}, // a function which produces all the messages
+    get: function (callback) {
+      var query = 'SELECT * FROM message';
+      db.get(query, function(err, result){
+        callback(err, result);
+      });
+    }, // a function which produces all the messages
     post: function (data, callback) {
       var query = 'INSERT INTO message (id, username, text, roomname) VALUES (NULL,"'
          + data.username + '","' + data.text + '","' + data.roomname + '");';
@@ -18,7 +23,12 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {},
+    get: function () {
+      var query = 'SELECT * FROM user';
+      db.get(query,function(err, result){
+        callback(err, result);
+      });
+    },
     post: function (data, callback) {
       var query = 'INSERT INTO user (id, username) VALUES (NULL,"'
          + data.username + '");';

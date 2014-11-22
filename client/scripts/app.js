@@ -66,25 +66,26 @@ $(function() {
         // data: { order: '-createdAt'},
         success: function(data) {
           console.log('chatterbox: Messages fetched');
+          console.log(data);
 
           // Don't bother if we have nothing to work with
-          if (!data.results || !data.results.length) { return; }
+          // if (!data.results || !data.results.length) { return; }
 
           // Get the last message
-          var mostRecentMessage = data.results[data.results.length-1];
+          // var mostRecentMessage = data.results[data.results.length-1];
           var displayedRoom = $('.chat span').first().data('roomname');
           app.stopSpinner();
           // Only bother updating the DOM if we have a new message
-          if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
+          // if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
             // Update the UI with the fetched rooms
-            app.populateRooms(data.results);
+            app.populateRooms(data);
 
             // Update the UI with the fetched messages
-            app.populateMessages(data.results, animate);
+            app.populateMessages(data, animate);
 
             // Store the ID of the most recent message
-            app.lastMessageId = mostRecentMessage.objectId;
-          }
+            // app.lastMessageId = mostRecentMessage.objectId;
+          // }
         },
         error: function(data) {
           console.error('chatterbox: Failed to fetch messages');
@@ -99,6 +100,7 @@ $(function() {
 
       app.clearMessages();
       app.stopSpinner();
+
       if (Array.isArray(results)) {
         // Add all fetched messages
         results.forEach(app.addMessage);

@@ -25,12 +25,14 @@ connection.connect(function(err) {
 // DELETE
 // UPDATE
 exports.post = function(sqlQuery, callback){
-  connection.query(sqlQuery,function(err, result) {
+  connection.query(sqlQuery, function(err, result) {
     callback(err, result);
   });
 
 };
 
-exports.get = function(){
-
+exports.get = function(sqlQuery, callback){
+  connection.query(sqlQuery, function(err, result) {
+    callback(err, result);
+  });
 };
