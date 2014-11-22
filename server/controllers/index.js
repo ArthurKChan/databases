@@ -7,6 +7,7 @@ var utils = require('../utils');
 module.exports = {
   messages: {
     get: function (req, res) {
+      console.log('getting messages');
       // console.log('abcdefghijklmnop');
     }, // a function which handles a get request for all messages
     post: function (req, res) {
@@ -24,7 +25,7 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      console.log('abcdefg');
+      console.log('getting users');
     },
     post: function (req, res) {
       models.users.post(req.body, function(err, success){
