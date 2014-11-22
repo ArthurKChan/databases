@@ -7,27 +7,27 @@ var mysql = require('mysql');
 
 var connection = mysql.createConnection({
   database: 'chat',
-  host     : '127.0.0.1:3000',
+  host     : '127.0.0.1',
   user     : 'root',
   password : ''
 });
 
 connection.connect(function(err) {
+  if(err){
+    console.log("WHAT THE HELL: ");
+  }
   // connected! (unless `err` is set)
 });
 
-var rows  = {id: 1, title: 'Hello MySQL'};
-// connection.query('use chat');
-var query = connection.query('INSERT INTO posts SET ?',
-  rows, function(err, result) {
-  // Neat!
-});
-console.log(query.sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
+// INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
+
 // sqlQuery = INSERT INTO message (id, username, text, room) VALUES (NULL, 'frank', 'fat', 'fuck');
 // DELETE
 // UPDATE
 exports.post = function(sqlQuery, callback){
-  connection.query(sqlQuery,callback);
+  connection.query(sqlQuery,function(err, result) {
+    callback(err, result);
+  });
 
 };
 

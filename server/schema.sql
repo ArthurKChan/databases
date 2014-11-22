@@ -5,6 +5,9 @@ USE chat;
 -- CREATE TABLE messages (
 --    Describe your table here.
 -- );
+-- DROP table user;
+-- DROP table message;
+-- DROP table room;
 
 CREATE TABLE `user` (
   `id` INT(40) NOT NULL AUTO_INCREMENT,
