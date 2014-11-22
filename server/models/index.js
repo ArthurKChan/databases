@@ -1,41 +1,58 @@
-var db = require('../db');
+var Sequelize = require("sequelize");
+var sequelize = new Sequelize("chat", "root", "");
 
+var User = sequelize.define('user', {
+  username: Sequelize.STRING
+});
 
-
+var Message = sequelize.define('message', {
+  username: Sequelize.STRING,
+  text: Sequelize.STRING,
+  roomname: Sequelize.STRING
+});
 
 module.exports = {
   messages: {
     get: function (callback) {
-      var query = 'SELECT * FROM message';
-      db.get(query, function(err, result){
-        callback(err, result);
-      });
+      Message.sync().success( function(){
+
+        Message.findAll().success(function(msgs) {
+          // This function is called back with an array of matches.
+          callback(undefined, msgs);
+        });
+
+     }).error(callback);
+
     }, // a function which produces all the messages
     post: function (data, callback) {
-      var query = 'INSERT INTO message (id, username, text, roomname) VALUES (NULL,"'
-         + data.username + '","' + data.text + '","' + data.roomname + '");';
+      Message.sync().success(function(){
+        var newMsg = Message.build(data);
 
-      db.post(query, function(err, result){
-        callback(err, result);
-      });
+        newMsg.save().success(function(){
+          console.log('post message successful');
+          callback(undefined, data)
+        });
+
+      }).error(callback);
     }  // a function which can be used to insert a message into the database
   },
 
   users: {
     // Ditto as above.
-    get: function () {
-      var query = 'SELECT * FROM user';
-      db.get(query,function(err, result){
-        callback(err, result);
+    get: function (callback) {
+      User.findAll().success(function(usrs) {
+        // This function is called back with an array of matches.
+        for (var i = 0; i < usrs.length; i++) {
+          console.log(usrs[i].username + " exists");
+        }
+        callback(undefined, usrs);
       });
     },
     post: function (data, callback) {
-      var query = 'INSERT INTO user (id, username) VALUES (NULL,"'
-         + data.username + '");';
-
-      db.post(query, function(err, result){
-        callback(err, result);
-      });
+     User.sync().success(function() {
+      var newUsr = User.build(data);
+      newUsr.save().success(callback);
+     });
     }
   }
 };

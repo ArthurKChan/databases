@@ -13,7 +13,7 @@ module.exports = {
           res.status(404).send('Get Messed up');
         }
         console.log(success);
-        console.log('text:',success[0].text);
+        // console.log('text:',success[0]['text']);
         res.send(success);
       });
       // console.log('abcdefghijklmnop');
