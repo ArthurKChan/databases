@@ -52,7 +52,6 @@ describe("Persistent Node Chat Server", function() {
 
         dbConnection.query(queryString, queryArgs, function(err, results) {
           // Should have one result:
-          // expect(results).to.equal(undefined);
           expect(results.affectedRows).to.equal(1);
 
           // TODO: If you don't have a column named text, change this test.

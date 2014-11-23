@@ -1,58 +1,33 @@
 var Sequelize = require("sequelize");
 var sequelize = new Sequelize("chat", "root", "");
-
-var User = sequelize.define('user', {
-  username: Sequelize.STRING
-});
-
-var Message = sequelize.define('message', {
-  username: Sequelize.STRING,
-  text: Sequelize.STRING,
-  roomname: Sequelize.STRING
-});
+var db = require("../db");
 
 module.exports = {
   messages: {
     get: function (callback) {
-      Message.sync().success( function(){
-
-        Message.findAll().success(function(msgs) {
-          // This function is called back with an array of matches.
-          callback(undefined, msgs);
-        });
-
-     }).error(callback);
-
+      db.Message.findAll({include: [db.User] }).complete(callback);
     }, // a function which produces all the messages
     post: function (data, callback) {
-      Message.sync().success(function(){
-        var newMsg = Message.build(data);
-
-        newMsg.save().success(function(){
-          console.log('post message successful');
-          callback(undefined, data)
+      db.User.findOrCreate({where: {username: data.username}})
+        .complete(function(err, results) {
+          var id = results[0].dataValues.id;
+          console.log('*******************USER ID:',id,' *************************');
+          db.Message.create({
+            userid: id,
+            text: data.text,
+            roomname: data.roomname
+          }).complete(callback);
         });
-
-      }).error(callback);
     }  // a function which can be used to insert a message into the database
   },
 
   users: {
     // Ditto as above.
     get: function (callback) {
-      User.findAll().success(function(usrs) {
-        // This function is called back with an array of matches.
-        for (var i = 0; i < usrs.length; i++) {
-          console.log(usrs[i].username + " exists");
-        }
-        callback(undefined, usrs);
-      });
+      db.User.findAll().complete(callback);
     },
     post: function (data, callback) {
-     User.sync().success(function() {
-      var newUsr = User.build(data);
-      newUsr.save().success(callback);
-     });
+      db.User.create({username: data.username}).complete(callback);
     }
   }
 };
